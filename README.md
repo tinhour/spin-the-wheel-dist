@@ -1,6 +1,28 @@
 # 抽奖转盘游戏
 
-一个基于 Web 的转盘抽奖游戏，支持 iOS 和 Android 原生应用集成。
+[English](./readme_en.md) | 简体中文
+
+一个精心设计的幸运转盘抽奖游戏，基于现代 Web 技术构建，提供流畅的动画效果和完整的抽奖体验。支持自定义奖品配置、动态修改转盘样式，并可以无缝集成到 iOS 和 Android 原生应用中。
+
+特别适合:
+- 营销活动和用户促活
+- 会员奖励系统
+- 游戏互动场景
+- 节日活动抽奖
+
+## 预览
+
+### 动画效果
+![转盘动画](screenshot/screenRecordingAnimation.gif)
+
+### 不同奖品数量效果
+6个奖品样式：
+
+![6个奖品](screenshot/screenFor6items.png)
+
+8个奖品样式：
+
+![8个奖品](screenshot/screenFor8items.png)
 
 ## 功能特点
 
@@ -20,16 +42,38 @@
 const PRIZES = [
 {
 title: '手气不错哟～恭喜获得',
-prize: '100元红包',
+prize: '一等奖',
+},
+{
+title: '手气不错哟～恭喜获得',
+prize: '二等奖',
 },
 // ... 其他奖品配置
 ];
 ```
-以及修改图片资源images/game-wheel.png与自己的奖品配置一致
+奖品区块会根据 PRIZES 数组自动生成，支持动态修改奖品数量和内容。
 
-### 2. 与原生应用交互
+### 2. 颜色配置
 
-#### 2.1 从原生应用接收参数
+转盘的颜色配置由两个数组控制：
+```javascript
+// 转盘背景颜色配置
+const COLORS = ["#f31f49", "#fff7d7", "#a71d77"];
+
+// 文字颜色配置
+const TEXT_COLORS = ["#f3f1f1", "#a8213c", "#f3f1f1"];
+```
+
+转盘的每个奖品区块会依次使用这些颜色，当颜色用完后会循环使用。例如：
+- 第1个奖品：背景色 #f31f49，文字颜色 #f3f1f1
+- 第2个奖品：背景色 #fff7d7，文字颜色 #a8213c
+- 第3个奖品：背景色 #a71d77，文字颜色 #f3f1f1
+- 第4个奖品：背景色 #f31f49，文字颜色 #f3f1f1（循环使用）
+- 以此类推...
+
+### 3. 与原生应用交互
+
+#### 3.1 从原生应用接收参数
 
 - 设置抽奖次数：
 
@@ -41,7 +85,7 @@ prize: '100元红包',
 }
 ```
 
-#### 2.2 向原生应用发送结果
+#### 3.2 向原生应用发送结果
 
 - 抽奖结果通知：
 
@@ -57,7 +101,7 @@ prize: '100元红包',
 }
 ```
 
-### 3. 原生应用集成方法
+### 4. 原生应用集成方法
 
 #### iOS 集成
 
@@ -101,7 +145,7 @@ webView.addJavascriptInterface(WebAppInterface(this), "Android")
 webView.evaluateJavascript("setLuckDrawCount($count)", null)
 ```
 
-### 4. 奖品位置说明
+### 5. 奖品位置说明
 
 转盘奖品位置对应关系：
 - index 0: 100元红包 (22.5°)
@@ -133,11 +177,18 @@ webView.evaluateJavascript("setLuckDrawCount($count)", null)
 ├── js/
 │   └── game.js           # 游戏逻辑
 ├── images/               # 图片资源
-│   ├── game-wheel.png
+│   ├── wheel-bg.png      # 转盘背景图
 │   ├── game-arrow.png
-│   └── game-bg.png
+│   ├── game-bg.png
 │   └── game-title.png
-│   └── screenshot.png
+├── screenshot/           # 预览图片
+│   ├── screenFor6items.png
+│   ├── screenFor8items.png
+│   └── screenRecordingAnimation.gif
 └── game.html            # 游戏主页面
 ```
 
+#todo
+- 添加动态生成奖品配置,根据传入的PRIZES传入的内容生成奖项的内容【done】
+- 添加更多交互方式，初始化时可以通过传入参数来决定交互方式，通过arguments付入奖品配置，通过callback返回结果
+- 增加打包输出到dist功能【done】
